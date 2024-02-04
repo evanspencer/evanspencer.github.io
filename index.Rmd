@@ -20,22 +20,6 @@ output:
 
 > Currently a WIP, the goal is to get some commonly used datascience calculators that are used at work.
 
----
-title: "A Data Science Blog"
-author: "[Evan Behrns](https://github.com/evanspencer)"
-date: "`r format(Sys.time(), '%d %B %Y')`"
-mail: "evanbehrns@gmail.com"
-linkedin: "https://www.linkedin.com/in/evanbehrns/"
-twitter: ""
-github: "evanspencer"
-home: ""
-logo: "sleep.jpg"
-output:
-  epuRate::epurate:
-    toc: TRUE
-    number_sections: FALSE
-    code_folding: "hide"
----
 
 # Embedding a Shiny App in R Markdown
 
