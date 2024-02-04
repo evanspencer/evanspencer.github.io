@@ -6,8 +6,7 @@ mail: "evanbehrns@gmail.com"
 linkedin: "https://www.linkedin.com/in/evanbehrns/"
 twitter: ""
 github: "evanspencer"
-home: ""
-# !!! You need to provide a logo image here !!! Or just delete the field for no logo
+home: "evanspencer.github.io"
 logo: "sleep.jpg"
 output:
   epuRate::epurate:
@@ -21,15 +20,17 @@ output:
 > Currently a WIP, the goal is to get some commonly used datascience calculators that are used at work.
 
 
+---
+
 # Embedding a Shiny App in R Markdown
 
 The other day I was looking at results for an A/B test we conducted and wanted to see if the results were significant. Naturally I wanted to check using a chi-squared test for our two version test. Looking up online calculators was kind of a pain, many were convoluted. I decided I would create my own quick chi-squared test calculator to quickly reference for future tests.
 The calculator has a confidence interval slider as well as inputs. Feel free to mess around with it :)
 
+<iframe src="https://evanspencer.shinyapps.io/chi_square_test/" style="border: none; width: 100%; height: 600px;" sandbox="allow-scripts allow-same-origin"></iframe>
 
-```{r, echo=FALSE, results='asis'}
-cat('<iframe src="https://evanspencer.shinyapps.io/chi_square_test/" style="border: none; width: 100%; height: 600px;"></iframe>')
-```
+<iframe src="https://evanspencer.shinyapps.io/chi_square_test/" style="border: none; width: 100%; height: 600px;"></iframe>
+
 
 # Get the data
 
