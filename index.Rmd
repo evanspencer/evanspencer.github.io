@@ -17,12 +17,16 @@ output:
 
 <br><br>
 
-> Currently a WIP, the goal is to get some commonly used datascience calculators that are used at work.
+> Currently a WIP :)
 
 
----
+# statistical tools
 
-# Embedding a Shiny App in R Markdown
+------------------------------------------------------------------------
+
+Below are a couple tools I created to use as a part of my daily workflow.
+
+## chisquarecalculator.exe
 
 The other day I was looking at results for an A/B test we conducted and wanted to see if the results were significant. Naturally I wanted to check using a chi-squared test for our two version test. Looking up online calculators was kind of a pain, many were convoluted. I decided I would create my own quick chi-squared test calculator to quickly reference for future tests.
 The calculator has a confidence interval slider as well as inputs. Feel free to mess around with it :)
