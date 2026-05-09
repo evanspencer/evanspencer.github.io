@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How I Built a Fintech Analytics Dashboard in One Session with Claude Code — Evan Spencer</title>
+  <meta name="description" content="A senior product analyst at BILL on using Claude Code to ship a B2B virtual card spend analytics dashboard in a single session — what worked, what required judgment, and what it means for analysts." />
+  <!-- Apply saved theme before first paint to prevent flash -->
+  <script>(function(){var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t;}());</script>
+  <style>
+    /* ── Reset ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Light mode — warm cream, orange-primary, blue-secondary ── */
+    :root {
+      --bg:                      #faf8f5;
+      --bg-alt:                  #f0ede8;
+      --border:                  #d5ccbf;
+      --text:                    #2a2735;
+      --text-muted:              #7a708a;
+      --accent-primary:          #E8956D;
+      --accent-primary-hover:    #D4774E;
+      --accent-primary-subtle:   #F5DDD3;
+      --accent-secondary:        #7AA2D4;
+      --accent-secondary-subtle: #D6E4F5;
+      --card-bg:                 #ffffff;
+      --tag-bg:                  #D6E4F5;
+      --tag-text:                #4a70a0;
+      --nav-bg:                  rgba(250,248,245,0.88);
+      --code-bg:                 #1a1b2e;
+      --code-fg:                 #c0caf5;
+      --shadow:                  0 1px 3px rgba(42,39,53,0.08), 0 4px 16px rgba(42,39,53,0.05);
+      --radius:                  10px;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      --font-mono: "SF Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace;
+    }
+
+    /* ── Dark mode: system preference ─────────────────────── */
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg:                      #1a1b2e;
+        --bg-alt:                  #16213e;
+        --border:                  #2f3549;
+        --text:                    #c0caf5;
+        --text-muted:              #565f89;
+        --accent-primary:          #D4845A;
+        --accent-primary-hover:    #E89A72;
+        --accent-primary-subtle:   #3D2318;
+        --accent-secondary:        #6A9DC8;
+        --accent-secondary-subtle: #1A2A3D;
+        --card-bg:                 #0f3460;
+        --tag-bg:                  #1A2A3D;
+        --tag-text:                #7AA2D4;
+        --nav-bg:                  rgba(26,27,46,0.92);
+        --code-bg:                 #16161e;
+        --shadow:                  0 1px 3px rgba(0,0,0,0.5), 0 4px 16px rgba(0,0,0,0.35);
+      }
+    }
+    html[data-theme="dark"] {
+      --bg:                      #1a1b2e;
+      --bg-alt:                  #16213e;
+      --border:                  #2f3549;
+      --text:                    #c0caf5;
+      --text-muted:              #565f89;
+      --accent-primary:          #D4845A;
+      --accent-primary-hover:    #E89A72;
+      --accent-primary-subtle:   #3D2318;
+      --accent-secondary:        #6A9DC8;
+      --accent-secondary-subtle: #1A2A3D;
+      --card-bg:                 #0f3460;
+      --tag-bg:                  #1A2A3D;
+      --tag-text:                #7AA2D4;
+      --nav-bg:                  rgba(26,27,46,0.92);
+      --code-bg:                 #16161e;
+      --shadow:                  0 1px 3px rgba(0,0,0,0.5), 0 4px 16px rgba(0,0,0,0.35);
+    }
+    html[data-theme="light"] {
+      --bg:                      #faf8f5;
+      --bg-alt:                  #f0ede8;
+      --border:                  #d5ccbf;
+      --text:                    #2a2735;
+      --text-muted:              #7a708a;
+      --accent-primary:          #E8956D;
+      --accent-primary-hover:    #D4774E;
+      --accent-primary-subtle:   #F5DDD3;
+      --accent-secondary:        #7AA2D4;
+      --accent-secondary-subtle: #D6E4F5;
+      --card-bg:                 #ffffff;
+      --tag-bg:                  #D6E4F5;
+      --tag-text:                #4a70a0;
+      --nav-bg:                  rgba(250,248,245,0.88);
+      --code-bg:                 #1a1b2e;
+      --shadow:                  0 1px 3px rgba(42,39,53,0.08), 0 4px 16px rgba(42,39,53,0.05);
+    }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Nav ─────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: var(--nav-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      border-radius: 6px;
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .theme-toggle:hover { color: var(--accent-primary); border-color: var(--accent-primary); }
+    .theme-toggle svg { width: 15px; height: 15px; pointer-events: none; }
+
+    /* ── Post layout ─────────────────────────────────────── */
+    .post-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ── Post header ─────────────────────────────────────── */
+    .post-header {
+      padding-top: 108px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid var(--border);
+    }
+    .breadcrumb {
+      font-size: 0.8rem;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+    .breadcrumb a {
+      color: var(--accent-primary);
+      text-decoration: none;
+    }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .breadcrumb span { margin: 0 6px; }
+    .post-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+    .post-tag {
+      font-size: 0.72rem;
+      font-weight: 600;
+      font-family: var(--font-mono);
+      padding: 3px 9px;
+      border-radius: 4px;
+      background: var(--tag-bg);
+      color: var(--tag-text);
+    }
+    .post-header h1 {
+      font-size: clamp(1.7rem, 4vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+    .post-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .post-meta-item {
+      font-size: 0.82rem;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .post-meta-item svg { width: 13px; height: 13px; opacity: 0.7; }
+
+    /* ── Post body ───────────────────────────────────────── */
+    .post-body {
+      padding: 52px 0 64px;
+    }
+    .post-body p {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+    .post-body h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin: 48px 0 16px;
+      padding-top: 4px;
+    }
+    .post-body h2::before {
+      content: '## ';
+      color: var(--accent-primary);
+      font-family: var(--font-mono);
+      font-size: 0.9em;
+      font-weight: 400;
+    }
+    .post-body h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      margin: 32px 0 12px;
+    }
+    .post-body strong { color: var(--text); font-weight: 600; }
+    .post-body em { color: var(--text-muted); font-style: italic; }
+
+    /* links in body */
+    .post-body a {
+      color: var(--accent-primary);
+      text-decoration: underline;
+      text-decoration-color: var(--accent-primary-subtle);
+      text-underline-offset: 3px;
+      transition: text-decoration-color 0.15s;
+    }
+    .post-body a:hover { text-decoration-color: var(--accent-primary); }
+
+    /* inline code */
+    .post-body code {
+      font-family: var(--font-mono);
+      font-size: 0.875em;
+      background: var(--accent-secondary-subtle);
+      color: var(--accent-secondary);
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+
+    /* code blocks */
+    .post-body pre {
+      background: var(--code-bg);
+      border: 1px solid var(--accent-secondary-subtle);
+      border-left: 3px solid var(--accent-secondary);
+      border-radius: var(--radius);
+      padding: 22px 24px;
+      overflow-x: auto;
+      margin: 28px 0;
+    }
+    .post-body pre code {
+      background: none;
+      color: var(--code-fg);
+      padding: 0;
+      font-size: 0.875rem;
+      line-height: 1.65;
+    }
+    /* Tokyo Night token colors — applied manually via spans */
+    .tok-kw   { color: #bb9af7; }  /* keyword — purple */
+    .tok-fn   { color: #7aa2f7; }  /* function — blue */
+    .tok-str  { color: #9ece6a; }  /* string — green */
+    .tok-num  { color: #ff9e64; }  /* number — orange */
+    .tok-cm   { color: #565f89; }  /* comment — muted */
+    .tok-cls  { color: #e0af68; }  /* class — yellow */
+    .tok-var  { color: #c0caf5; }  /* variable — foreground */
+    .tok-key  { color: #7dcfff; }  /* dict key — cyan */
+
+    /* callout box */
+    .callout {
+      background: var(--accent-primary-subtle);
+      border-left: 3px solid var(--accent-primary);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 16px 20px;
+      margin: 28px 0;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: var(--text);
+    }
+
+    /* horizontal rule */
+    .post-body hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 48px 0;
+    }
+
+    /* ── Post footer / prev-next ─────────────────────────── */
+    .post-nav {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .post-nav-link {
+      font-size: 0.875rem;
+      text-decoration: none;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.15s;
+    }
+    .post-nav-link:hover { color: var(--accent-primary); }
+    .post-nav-label {
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    /* ── Site footer ─────────────────────────────────────── */
+    .site-footer {
+      border-top: 1px solid var(--border);
+      padding: 36px 0;
+    }
+    .site-footer .footer-inner {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .site-footer .footer-copy { font-size: 0.82rem; color: var(--text-muted); }
+    .site-footer .footer-links { display: flex; gap: 20px; }
+    .site-footer .footer-links a {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .site-footer .footer-links a:hover { color: var(--text); }
+
+    /* ── Responsive ──────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .nav-links { gap: 18px; }
+      .nav-links li:nth-child(n+4) { display: none; }
+      .post-nav { flex-direction: column; align-items: flex-start; }
+      .site-footer .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Nav ────────────────────────────────────────────────── -->
+  <nav>
+    <div class="nav-inner">
+      <a class="nav-logo" href="/">Evan Spencer</a>
+      <ul class="nav-links">
+        <li><a href="/#projects">Projects</a></li>
+        <li><a href="/#blog">Writing</a></li>
+        <li><a href="/#about">About</a></li>
+        <li><a href="mailto:evanbehrns@gmail.com">Contact</a></li>
+      </ul>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle color theme">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:none">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ── Post ───────────────────────────────────────────────── -->
+  <div class="post-wrap">
+    <header class="post-header">
+      <p class="breadcrumb">
+        <a href="/#blog">Writing</a>
+        <span>/</span>
+        How I Built a Fintech Analytics Dashboard
+      </p>
+      <div class="post-tags">
+        <span class="post-tag">Claude Code</span>
+        <span class="post-tag">Python</span>
+        <span class="post-tag">Streamlit</span>
+        <span class="post-tag">Fintech</span>
+      </div>
+      <h1>How I Built a Fintech Analytics Dashboard in One Session with Claude Code</h1>
+      <div class="post-meta">
+        <span class="post-meta-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          May 9, 2026
+        </span>
+        <span class="post-meta-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          7 min read
+        </span>
+        <span class="post-meta-item">Evan Spencer</span>
+      </div>
+    </header>
+
+    <article class="post-body">
+
+      <p>
+        Every analyst who works with payment data runs into the same wall. You can see something
+        interesting in SQL &mdash; a pattern in how companies spend, a clustering of transaction
+        behavior, a product signal hiding in merchant categories &mdash; but turning that into
+        something your stakeholders can actually <em>explore</em> requires a whole other skillset.
+        You either wait for eng time, build something janky in Excel, or scope the insight down
+        until it fits in a slide deck.
+      </p>
+
+      <p>
+        I&rsquo;ve been working with virtual card transaction data at BILL for a while now.
+        I&rsquo;m comfortable in SQL and I write Python when I need to, but building a real
+        interactive dashboard &mdash; with proper data generation, meaningful categorization logic,
+        and a visualization that actually tells a story &mdash; felt like a full sprint of eng work.
+        Last week I did it in an afternoon, pair programming with Claude Code.
+      </p>
+
+      <p>
+        Here&rsquo;s what I built, how the session actually went, and what I think it means for
+        analysts who want to ship things.
+      </p>
+
+      <h2>The business question I&rsquo;d been sitting on</h2>
+
+      <p>
+        Virtual card transactions carry a Merchant Category Code &mdash; a four-digit MCC
+        assigned by the card network. MCC 5045 is computers and peripherals. MCC 7372 is
+        prepackaged software. MCC 7311 is advertising agencies. There are hundreds of these
+        codes, and for B2B fintech, they&rsquo;re the canonical taxonomy of what companies
+        actually spend money on.
+      </p>
+
+      <p>
+        The question I kept returning to: when a company uses a virtual card product, which
+        merchant categories cluster together? If a company uses cards heavily for SaaS
+        subscriptions, does that predict anything about their advertising spend? Their
+        travel patterns? This is a <strong>product affinity question</strong> &mdash; do certain
+        spend behaviors travel together, and if so, what does that tell us about which
+        product segments we&rsquo;re actually serving?
+      </p>
+
+      <p>
+        Answering it properly meant building something interactive. I wanted to hand a PM an
+        artifact they could filter and explore, not a static chart in a slide.
+      </p>
+
+      <h2>Starting with synthetic data</h2>
+
+      <p>
+        The first design constraint was obvious: real virtual card transaction data lives behind
+        access controls, legal agreements, and infrastructure I can&rsquo;t publish to a public
+        GitHub repo. So I needed synthetic data that was <strong>structurally realistic</strong>
+        &mdash; not random noise, but something that preserved the statistical properties that
+        make the analysis meaningful.
+      </p>
+
+      <p>
+        This is where the session with Claude Code started. I described the schema I
+        needed: transactions with merchant names, MCC codes, amounts, card product types, and
+        company-level attributes like size tier and industry vertical. Then I described what
+        &ldquo;structurally realistic&rdquo; actually meant for B2B payment data.
+      </p>
+
+      <div class="callout">
+        The key insight we worked through together: real B2B spend has fat tails. A few
+        merchants capture most of the volume. Software subscriptions are small and frequent.
+        Vendor payments are large and rare. A uniform distribution across amounts would
+        produce a dashboard that looks clean but lies about the underlying reality.
+      </div>
+
+      <p>
+        We landed on lognormal distributions parameterized by MCC category, calibrated to
+        match the rough shape of what I know from working with real data:
+      </p>
+
+      <pre><code><span class="tok-cm"># Amount distributions vary significantly by spend category</span>
+<span class="tok-cls">MCC_AMOUNT_PROFILES</span> <span class="tok-var">= {</span>
+    <span class="tok-key">"software"</span><span class="tok-var">:    {</span><span class="tok-key">"dist"</span><span class="tok-var">:</span> <span class="tok-str">"lognormal"</span><span class="tok-var">,</span> <span class="tok-key">"mu"</span><span class="tok-var">:</span> <span class="tok-num">4.2</span><span class="tok-var">,</span> <span class="tok-key">"sigma"</span><span class="tok-var">:</span> <span class="tok-num">1.1</span><span class="tok-var">},</span>   <span class="tok-cm"># ~$60–$5k</span>
+    <span class="tok-key">"advertising"</span><span class="tok-var">: {</span><span class="tok-key">"dist"</span><span class="tok-var">:</span> <span class="tok-str">"lognormal"</span><span class="tok-var">,</span> <span class="tok-key">"mu"</span><span class="tok-var">:</span> <span class="tok-num">6.8</span><span class="tok-var">,</span> <span class="tok-key">"sigma"</span><span class="tok-var">:</span> <span class="tok-num">1.4</span><span class="tok-var">},</span>   <span class="tok-cm"># ~$500–$50k</span>
+    <span class="tok-key">"travel"</span><span class="tok-var">:      {</span><span class="tok-key">"dist"</span><span class="tok-var">:</span> <span class="tok-str">"lognormal"</span><span class="tok-var">,</span> <span class="tok-key">"mu"</span><span class="tok-var">:</span> <span class="tok-num">5.1</span><span class="tok-var">,</span> <span class="tok-key">"sigma"</span><span class="tok-var">:</span> <span class="tok-num">1.6</span><span class="tok-var">},</span>   <span class="tok-cm"># ~$150–$8k</span>
+    <span class="tok-key">"utilities"</span><span class="tok-var">:   {</span><span class="tok-key">"dist"</span><span class="tok-var">:</span> <span class="tok-str">"lognormal"</span><span class="tok-var">,</span> <span class="tok-key">"mu"</span><span class="tok-var">:</span> <span class="tok-num">4.8</span><span class="tok-var">,</span> <span class="tok-key">"sigma"</span><span class="tok-var">:</span> <span class="tok-num">0.8</span><span class="tok-var">},</span>   <span class="tok-cm"># ~$120–$800</span>
+<span class="tok-var">}</span></code></pre>
+
+      <p>
+        Claude Code wrote the Faker-based generation scaffolding quickly once I had the
+        statistical shape right. What I brought to that exchange was knowing <em>which</em>
+        distributions to use and why. What I didn&rsquo;t need to bring: the Faker API,
+        the NumPy sampling calls, or the pandas DataFrame construction.
+      </p>
+
+      <h2>The categorization layer</h2>
+
+      <p>
+        Raw MCC codes aren&rsquo;t useful for analysis &mdash; there are too many of them
+        (hundreds of four-digit codes) and they&rsquo;re granular in ways that don&rsquo;t
+        map cleanly to analytical questions. The spend categorizer needed a bucketing layer
+        that collapsed MCCs into a smaller set of meaningful categories.
+      </p>
+
+      <p>
+        This was the first place where the judgment calls were genuinely mine. Should &ldquo;computers
+        and peripherals&rdquo; (MCC 5045) live in the same bucket as &ldquo;prepackaged software&rdquo;
+        (MCC 7372)? Analytically, yes &mdash; both are tech spend, both tend to co-occur with
+        SaaS-heavy companies. Should &ldquo;airlines&rdquo; (MCC 3000&ndash;3299) and
+        &ldquo;hotels&rdquo; (MCC 7011) merge into a single &ldquo;travel&rdquo; category?
+        Probably, unless you care about the company-level distinction.
+      </p>
+
+      <p>
+        I landed on 12 top-level categories: <code>software</code>, <code>advertising</code>,
+        <code>travel</code>, <code>utilities</code>, <code>professional_services</code>,
+        <code>office_supplies</code>, <code>food_entertainment</code>, <code>logistics</code>,
+        <code>hardware</code>, <code>telecom</code>, <code>financial_services</code>, and
+        <code>other</code>. The final mapping dictionary was something I drafted based on domain
+        knowledge, then had Claude Code clean up and validate for completeness.
+      </p>
+
+      <pre><code><span class="tok-kw">def</span> <span class="tok-fn">categorize_mcc</span><span class="tok-var">(mcc_code: </span><span class="tok-cls">int</span><span class="tok-var">) -> </span><span class="tok-cls">str</span><span class="tok-var">:</span>
+    <span class="tok-str">"""Map a four-digit MCC to a top-level spend category."""</span>
+    <span class="tok-kw">if</span> <span class="tok-num">5045</span> <span class="tok-kw">== </span><span class="tok-var">mcc_code </span><span class="tok-kw">or </span><span class="tok-num">7372</span> <span class="tok-kw">== </span><span class="tok-var">mcc_code</span><span class="tok-var">:</span>
+        <span class="tok-kw">return</span> <span class="tok-str">"software"</span>
+    <span class="tok-kw">elif</span> <span class="tok-var">mcc_code </span><span class="tok-kw">in </span><span class="tok-var">ADVERTISING_MCCS:</span>
+        <span class="tok-kw">return</span> <span class="tok-str">"advertising"</span>
+    <span class="tok-kw">elif</span> <span class="tok-num">3000</span> <span class="tok-kw">&lt;=</span><span class="tok-var"> mcc_code </span><span class="tok-kw">&lt;=</span> <span class="tok-num">3299</span> <span class="tok-kw">or</span><span class="tok-var"> mcc_code </span><span class="tok-kw">==</span> <span class="tok-num">7011</span><span class="tok-var">:</span>
+        <span class="tok-kw">return</span> <span class="tok-str">"travel"</span>
+    <span class="tok-cm">    # ... remaining categories</span>
+    <span class="tok-kw">    return</span> <span class="tok-str">"other"</span></code></pre>
+
+      <h2>Building the affinity visualization</h2>
+
+      <p>
+        The centerpiece of the dashboard is a bubble chart showing merchant category spend
+        patterns broken out by card product type. The encoding:
+      </p>
+
+      <ul style="margin: 0 0 24px 24px; line-height: 2;">
+        <li><strong>X axis</strong> &mdash; average transaction frequency per company per month</li>
+        <li><strong>Y axis</strong> &mdash; median transaction amount (log scale)</li>
+        <li><strong>Bubble size</strong> &mdash; number of companies using this category</li>
+        <li><strong>Color</strong> &mdash; card product type (SaaS-focused, expense management, AP automation)</li>
+      </ul>
+
+      <p>
+        The goal is to reveal structure: do high-frequency, low-amount transactions cluster
+        in one product type? Do infrequent, high-value transactions indicate a different use
+        case? If the product types genuinely serve different spend behaviors, the chart should
+        show them separating in the space.
+      </p>
+
+      <p>
+        What I learned building this: the hardest part wasn&rsquo;t the Plotly code. It was
+        figuring out what <em>affinity</em> actually meant as something measurable. High
+        co-occurrence between categories? Correlation in spend share across companies?
+        I went with a simpler proxy &mdash; Pearson correlation between category spend-share
+        vectors across companies &mdash; which isn&rsquo;t perfect but is interpretable to
+        a PM without a stats background.
+      </p>
+
+      <p>
+        Claude Code wrote the Plotly figure code quickly once I had the data shape nailed
+        down. What I had to bring to that exchange: knowing that the color encoding should
+        be the product dimension (not the MCC), knowing what fields needed to be in the hover
+        text, and knowing that the Y axis needed a log scale because spend amounts span two
+        orders of magnitude.
+      </p>
+
+      <h2>What Claude Code did and didn&rsquo;t do</h2>
+
+      <p>
+        I want to be honest about this, because the marketing version of this story (&ldquo;AI
+        wrote my dashboard!&rdquo;) misses what actually happened.
+      </p>
+
+      <p>
+        Two things genuinely surprised me. First, <strong>context retention</strong>. I
+        described the MCC hierarchy and the product segmentation once, early in the session,
+        and that context got used throughout. When I asked &ldquo;should MCC 5045 and 5065
+        go in the same bucket?&rdquo; &mdash; 5045 is computers/peripherals, 5065 is electrical
+        apparatus &mdash; I got back a substantive answer about the tradeoff, not a generic
+        response. The domain framing I provided stuck.
+      </p>
+
+      <p>
+        Second, <strong>the parts I thought would be hard were fast</strong>. The data model
+        took maybe twenty minutes total. Faker configuration, pandas wrangling, Streamlit
+        layout, Plotly figure construction &mdash; all of this was quick. These are the parts
+        where I used to get stuck googling syntax.
+      </p>
+
+      <p>
+        What took time were the judgment calls that were genuinely mine. Deciding the right
+        MCC bucketing granularity. Choosing the right affinity metric. Deciding which filters
+        to expose in the Streamlit sidebar versus hardcoding. Figuring out what story the
+        bubble chart should tell and encoding that in the axis choices. None of that was
+        delegatable.
+      </p>
+
+      <div class="callout">
+        The bottleneck shifted from &ldquo;can I write this code&rdquo; to &ldquo;do I know
+        what to build.&rdquo; That&rsquo;s a meaningful change if you think about where analyst
+        time was going before.
+      </div>
+
+      <h2>The result</h2>
+
+      <p>
+        The dashboard has four panels: a spend-by-category bar chart, a category co-occurrence
+        heatmap, the affinity bubble chart, and a filterable transaction table. The synthetic
+        dataset runs to ~50,000 transactions across 200 companies, 12 MCC categories, and
+        3 product types &mdash; enough to make the visualizations feel real.
+      </p>
+
+      <p>
+        It&rsquo;s not a production analytics tool. The data is fake, the company attributes
+        are randomly generated, and the affinity metric is a first-pass proxy. But it&rsquo;s
+        a working, shareable artifact that demonstrates a real analytical idea &mdash; and it
+        exists because I was able to ship a complete thing in a single afternoon instead of
+        waiting on engineering.
+      </p>
+
+      <h2>What this means if you&rsquo;re an analyst</h2>
+
+      <p>
+        The mental model I find useful: Claude Code is a very capable junior engineer who
+        knows all the syntax and APIs cold, but has no domain knowledge and no opinion about
+        what should be built. You still have to be the person who knows that virtual card
+        transactions have fat-tailed amount distributions. You still have to know that MCC
+        codes need bucketing to be analytically useful. You still have to decide what story
+        the bubble chart should tell.
+      </p>
+
+      <p>
+        What you don&rsquo;t have to bring: pandas syntax, Streamlit layout APIs, Plotly
+        figure construction, Faker providers, data type handling. The mechanics of
+        implementation can be delegated. The understanding of the problem cannot.
+      </p>
+
+      <p>
+        If you&rsquo;re a product analyst who writes Python occasionally and has a
+        half-formed idea for a dashboard or tool you&rsquo;ve been putting off because it
+        would take more eng-style work than you have capacity for &mdash; the calculus has
+        changed. The domain expertise you&rsquo;ve been building is exactly what the tool
+        needs from you. The rest moves faster now.
+      </p>
+
+      <hr />
+
+      <p>
+        The full code is on GitHub:
+        <a href="https://github.com/evanspencer/spend-categorizer" target="_blank" rel="noopener">github.com/evanspencer/spend-categorizer</a>.
+        Streamlit Community Cloud deployment coming soon &mdash; I&rsquo;ll embed the live
+        dashboard in the <a href="/projects/spend-categorizer.html">project case study page</a>
+        once it&rsquo;s live.
+      </p>
+
+    </article>
+
+    <!-- ── Prev / Next nav ─────────────────────────────────────── -->
+    <nav class="post-nav" aria-label="Post navigation">
+      <a class="post-nav-link" href="/#blog">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        <div>
+          <div class="post-nav-label">All writing</div>
+          Back to Writing
+        </div>
+      </a>
+      <div style="font-size:0.82rem; color:var(--text-muted); font-family:var(--font-mono);">
+        More posts coming soon
+      </div>
+    </nav>
+  </div>
+
+  <!-- ── Site footer ─────────────────────────────────────────── -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span class="footer-copy">&copy; 2026 Evan Spencer</span>
+      <div class="footer-links">
+        <a href="https://github.com/evanspencer" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://linkedin.com/in/evanbehrns" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="mailto:evanbehrns@gmail.com">Email</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Theme toggle
+    (function () {
+      const root = document.documentElement;
+      const btn  = document.getElementById('theme-toggle');
+      if (!btn) return;
+      const sun  = btn.querySelector('.icon-sun');
+      const moon = btn.querySelector('.icon-moon');
+
+      function isDark() {
+        return root.dataset.theme
+          ? root.dataset.theme === 'dark'
+          : window.matchMedia('(prefers-color-scheme: dark)').matches;
+      }
+
+      function syncIcon() {
+        sun.style.display  = isDark() ? 'block' : 'none';
+        moon.style.display = isDark() ? 'none'  : 'block';
+      }
+
+      syncIcon();
+
+      btn.addEventListener('click', function () {
+        const next = isDark() ? 'light' : 'dark';
+        root.dataset.theme = next;
+        localStorage.setItem('theme', next);
+        syncIcon();
+      });
+    }());
+  </script>
+</body>
+</html>
