@@ -146,6 +146,7 @@
       line-height: 1.1;
       color: var(--text);
       margin-bottom: 12px;
+      min-height: 1.15em; /* reserve space so layout doesn't jump while typing */
     }
 
     .hero-title {
@@ -153,6 +154,21 @@
       color: var(--text-muted);
       font-weight: 400;
       margin-bottom: 28px;
+      min-height: 1.6rem;
+    }
+
+    /* ── Typewriter cursor ─────────────────────────────────── */
+    .type-cursor {
+      display: inline-block;
+      color: var(--accent);
+      font-weight: 300;
+      margin-left: 1px;
+      animation: cursor-blink 1s step-end infinite;
+    }
+
+    @keyframes cursor-blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
     }
 
     .hero-bio {
@@ -533,8 +549,8 @@
         </div>
         <div class="hero-text">
       <p class="hero-eyebrow">evanspencer.github.io</p>
-      <h1>Evan Spencer</h1>
-      <p class="hero-title">Senior Product Data Analyst &middot; BILL</p>
+      <h1 id="type-name" aria-label="Evan Spencer"></h1>
+      <p class="hero-title" id="type-title" aria-label="Senior Product Data Analyst at BILL"></p>
       <p class="hero-bio">
         Senior product analyst in fintech specializing in virtual cards and payments,
         with a focus on causal inference and storytelling.
@@ -688,6 +704,66 @@
         heroMono.classList.add('show');
       };
     }
+
+    // Typewriter effect — runs once on page load
+    (function () {
+      const isMobile = window.matchMedia('(max-width: 600px)').matches;
+      const speed    = isMobile ? 0.65 : 1;
+
+      const nameEl  = document.getElementById('type-name');
+      const titleEl = document.getElementById('type-title');
+      if (!nameEl || !titleEl) return;
+
+      // Skip animation for users who prefer reduced motion
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        nameEl.textContent  = 'Evan Spencer';
+        titleEl.textContent = 'Senior Product Data Analyst · BILL';
+        return;
+      }
+
+      const cursor = document.createElement('span');
+      cursor.className = 'type-cursor';
+      cursor.setAttribute('aria-hidden', 'true');
+      cursor.textContent = '|';
+
+      function wait(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms * speed));
+      }
+
+      function keystrokeMs(ch) {
+        // Human-like variation: 65–115ms base, longer at word/punctuation boundaries
+        let ms = 65 + Math.random() * 50;
+        if (ch === ' ')      ms += 20 + Math.random() * 35;
+        if (ch === '·') ms += 55;  // linger slightly on the middle dot
+        return ms;
+      }
+
+      async function typeInto(el, text) {
+        el.appendChild(cursor);
+        let typed = '';
+        for (const ch of text) {
+          typed += ch;
+          const node = el.firstChild;
+          if (node && node !== cursor) {
+            node.textContent = typed;
+          } else {
+            el.insertBefore(document.createTextNode(typed), cursor);
+          }
+          await wait(keystrokeMs(ch));
+        }
+      }
+
+      async function run() {
+        await typeInto(nameEl, 'Evan Spencer');
+        await wait(500);  // pause — cursor blinks in place before moving on
+
+        nameEl.removeChild(cursor);
+        await typeInto(titleEl, 'Senior Product Data Analyst · BILL');
+        // cursor stays in titleEl, keeps blinking
+      }
+
+      run();
+    }());
 
     // Fade-in on scroll
     const observer = new IntersectionObserver((entries) => {
