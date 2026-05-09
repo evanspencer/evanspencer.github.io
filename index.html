@@ -11,97 +11,107 @@
     /* ── Reset & Base ──────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* ── Light mode — warm cream, orange-primary, blue-secondary ── */
+    /* ── Kanagawa Lotus — light mode ──────────────────────────── */
     :root {
-      --bg:                      #faf8f5;
-      --bg-alt:                  #f0ede8;
-      --border:                  #d5ccbf;
-      --text:                    #2a2735;
-      --text-muted:              #7a708a;
-      --accent-primary:          #E8956D;
-      --accent-primary-hover:    #D4774E;
-      --accent-primary-subtle:   #F5DDD3;
-      --accent-secondary:        #7AA2D4;
-      --accent-secondary-subtle: #D6E4F5;
-      --card-bg:                 #ffffff;
-      --tag-bg:                  #D6E4F5;
-      --tag-text:                #4a70a0;
-      --nav-bg:                  rgba(250,248,245,0.88);
-      --shadow:                  0 1px 3px rgba(42,39,53,0.08), 0 4px 16px rgba(42,39,53,0.05);
-      --shadow-hover:            0 2px 8px rgba(42,39,53,0.12), 0 8px 32px rgba(42,39,53,0.09);
+      --bg-primary:              #F8F7F4;
+      --bg-secondary:            #EFEDE8;
+      --bg-surface:              #FFFFFF;
+      --border-color:            #D8D5CE;
+      --text-primary:            #2D2D3D;
+      --text-muted:              #8A8980;
+      --accent-primary:          #C98A2E;
+      --accent-primary-hover:    #B8751A;
+      --accent-primary-subtle:   #F5E8C8;
+      --accent-primary-text:     #7A5A10;
+      --accent-secondary:        #4E8B7A;
+      --accent-secondary-subtle: #D4EDE8;
+      --accent-secondary-text:   #2D6B5C;
+      --nav-bg:                  rgba(248,247,244,0.88);
+      --shadow:                  0 1px 3px rgba(45,45,61,0.08), 0 4px 16px rgba(45,45,61,0.05);
+      --shadow-hover:            0 2px 8px rgba(45,45,61,0.12), 0 8px 32px rgba(45,45,61,0.09);
       --radius:                  10px;
       --font: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
       --font-mono: "SF Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace;
     }
 
-    /* ── Dark mode: system preference ─────────────────────────── */
+    /* ── Kanagawa Ink — dark mode: system preference ───────────── */
     @media (prefers-color-scheme: dark) {
       :root:not([data-theme="light"]) {
-        --bg:                      #1a1b2e;
-        --bg-alt:                  #16213e;
-        --border:                  #2f3549;
-        --text:                    #c0caf5;
-        --text-muted:              #565f89;
-        --accent-primary:          #D4845A;
-        --accent-primary-hover:    #E89A72;
-        --accent-primary-subtle:   #3D2318;
-        --accent-secondary:        #6A9DC8;
-        --accent-secondary-subtle: #1A2A3D;
-        --card-bg:                 #0f3460;
-        --tag-bg:                  #1A2A3D;
-        --tag-text:                #7AA2D4;
-        --nav-bg:                  rgba(26,27,46,0.92);
+        --bg-primary:              #1F1F28;
+        --bg-secondary:            #2A2A37;
+        --bg-surface:              #2A2A37;
+        --border-color:            #363646;
+        --text-primary:            #DCD7BA;
+        --text-muted:              #727169;
+        --accent-primary:          #DCA561;
+        --accent-primary-hover:    #E8B878;
+        --accent-primary-subtle:   #3D2B0A;
+        --accent-primary-text:     #DCA561;
+        --accent-secondary:        #6A9589;
+        --accent-secondary-subtle: #0D2D27;
+        --accent-secondary-text:   #6A9589;
+        --nav-bg:                  rgba(31,31,40,0.92);
         --shadow:                  0 1px 3px rgba(0,0,0,0.5), 0 4px 16px rgba(0,0,0,0.35);
         --shadow-hover:            0 2px 8px rgba(0,0,0,0.6), 0 8px 32px rgba(0,0,0,0.5);
+        --syntax-blue:   #7E9CD8;
+        --syntax-purple: #957FB8;
+        --syntax-green:  #98BB6C;
+        --syntax-red:    #E46876;
+        --syntax-orange: #FFA066;
       }
     }
 
     /* ── Dark mode: manual override ───────────────────────────── */
     html[data-theme="dark"] {
-      --bg:                      #1a1b2e;
-      --bg-alt:                  #16213e;
-      --border:                  #2f3549;
-      --text:                    #c0caf5;
-      --text-muted:              #565f89;
-      --accent-primary:          #D4845A;
-      --accent-primary-hover:    #E89A72;
-      --accent-primary-subtle:   #3D2318;
-      --accent-secondary:        #6A9DC8;
-      --accent-secondary-subtle: #1A2A3D;
-      --card-bg:                 #0f3460;
-      --tag-bg:                  #1A2A3D;
-      --tag-text:                #7AA2D4;
-      --nav-bg:                  rgba(26,27,46,0.92);
+      --bg-primary:              #1F1F28;
+      --bg-secondary:            #2A2A37;
+      --bg-surface:              #2A2A37;
+      --border-color:            #363646;
+      --text-primary:            #DCD7BA;
+      --text-muted:              #727169;
+      --accent-primary:          #DCA561;
+      --accent-primary-hover:    #E8B878;
+      --accent-primary-subtle:   #3D2B0A;
+      --accent-primary-text:     #DCA561;
+      --accent-secondary:        #6A9589;
+      --accent-secondary-subtle: #0D2D27;
+      --accent-secondary-text:   #6A9589;
+      --nav-bg:                  rgba(31,31,40,0.92);
       --shadow:                  0 1px 3px rgba(0,0,0,0.5), 0 4px 16px rgba(0,0,0,0.35);
       --shadow-hover:            0 2px 8px rgba(0,0,0,0.6), 0 8px 32px rgba(0,0,0,0.5);
+      --syntax-blue:   #7E9CD8;
+      --syntax-purple: #957FB8;
+      --syntax-green:  #98BB6C;
+      --syntax-red:    #E46876;
+      --syntax-orange: #FFA066;
     }
 
     /* ── Light mode: manual override (beats system dark) ──────── */
     html[data-theme="light"] {
-      --bg:                      #faf8f5;
-      --bg-alt:                  #f0ede8;
-      --border:                  #d5ccbf;
-      --text:                    #2a2735;
-      --text-muted:              #7a708a;
-      --accent-primary:          #E8956D;
-      --accent-primary-hover:    #D4774E;
-      --accent-primary-subtle:   #F5DDD3;
-      --accent-secondary:        #7AA2D4;
-      --accent-secondary-subtle: #D6E4F5;
-      --card-bg:                 #ffffff;
-      --tag-bg:                  #D6E4F5;
-      --tag-text:                #4a70a0;
-      --nav-bg:                  rgba(250,248,245,0.88);
-      --shadow:                  0 1px 3px rgba(42,39,53,0.08), 0 4px 16px rgba(42,39,53,0.05);
-      --shadow-hover:            0 2px 8px rgba(42,39,53,0.12), 0 8px 32px rgba(42,39,53,0.09);
+      --bg-primary:              #F8F7F4;
+      --bg-secondary:            #EFEDE8;
+      --bg-surface:              #FFFFFF;
+      --border-color:            #D8D5CE;
+      --text-primary:            #2D2D3D;
+      --text-muted:              #8A8980;
+      --accent-primary:          #C98A2E;
+      --accent-primary-hover:    #B8751A;
+      --accent-primary-subtle:   #F5E8C8;
+      --accent-primary-text:     #7A5A10;
+      --accent-secondary:        #4E8B7A;
+      --accent-secondary-subtle: #D4EDE8;
+      --accent-secondary-text:   #2D6B5C;
+      --nav-bg:                  rgba(248,247,244,0.88);
+      --shadow:                  0 1px 3px rgba(45,45,61,0.08), 0 4px 16px rgba(45,45,61,0.05);
+      --shadow-hover:            0 2px 8px rgba(45,45,61,0.12), 0 8px 32px rgba(45,45,61,0.09);
     }
 
     html { scroll-behavior: smooth; font-size: 16px; }
 
     body {
       font-family: var(--font);
-      background: var(--bg);
-      color: var(--text);
+      background: var(--bg-primary);
+      color: var(--text-primary);
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
     }
@@ -114,7 +124,7 @@
       background: var(--nav-bg);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--border-color);
     }
 
     .nav-inner {
@@ -130,7 +140,7 @@
     .nav-logo {
       font-size: 0.9rem;
       font-weight: 600;
-      color: var(--text);
+      color: var(--text-primary);
       text-decoration: none;
       letter-spacing: -0.01em;
     }
@@ -148,11 +158,11 @@
       transition: color 0.15s;
     }
 
-    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover { color: var(--text-primary); }
 
     .theme-toggle {
       background: none;
-      border: 1px solid var(--border);
+      border: 1px solid var(--border-color);
       color: var(--text-muted);
       border-radius: 6px;
       width: 34px;
@@ -178,7 +188,7 @@
     }
 
     section { padding: 100px 0; }
-    section + section { border-top: 1px solid var(--border); }
+    section + section { border-top: 1px solid var(--border-color); }
 
     .section-label {
       font-size: 0.75rem;
@@ -210,7 +220,7 @@
       font-weight: 700;
       letter-spacing: -0.03em;
       line-height: 1.1;
-      color: var(--text);
+      color: var(--text-primary);
       margin-bottom: 12px;
       min-height: 1.15em; /* reserve space so layout doesn't jump while typing */
     }
@@ -239,7 +249,7 @@
 
     .hero-bio {
       font-size: 1.05rem;
-      color: var(--text);
+      color: var(--text-primary);
       max-width: 560px;
       line-height: 1.7;
       margin-bottom: 40px;
@@ -260,9 +270,9 @@
       font-size: 0.875rem;
       font-weight: 500;
       text-decoration: none;
-      border: 1px solid var(--border);
-      color: var(--text);
-      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      background: var(--bg-surface);
       transition: border-color 0.15s, box-shadow 0.15s, color 0.15s;
     }
 
@@ -287,8 +297,8 @@
       height: 116px;
       border-radius: 50%;
       overflow: hidden;
-      border: 2px solid var(--border);
-      background: var(--tag-bg);
+      border: 2px solid var(--border-color);
+      background: var(--accent-secondary-subtle);
       box-shadow: 0 0 0 5px var(--accent-primary-subtle);
       margin-top: 8px;
     }
@@ -326,8 +336,8 @@
     }
 
     .project-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
       border-radius: var(--radius);
       padding: 28px;
       text-decoration: none;
@@ -358,7 +368,7 @@
       font-size: 1.1rem;
       font-weight: 600;
       letter-spacing: -0.01em;
-      color: var(--text);
+      color: var(--text-primary);
     }
 
     .project-card p {
@@ -381,8 +391,8 @@
       font-family: var(--font-mono);
       padding: 3px 9px;
       border-radius: 4px;
-      background: var(--tag-bg);
-      color: var(--tag-text);
+      background: var(--accent-secondary-subtle);
+      color: var(--accent-secondary-text);
     }
 
     .card-arrow {
@@ -410,7 +420,7 @@
       align-items: flex-start;
       gap: 24px;
       padding: 28px 0;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--border-color);
       text-decoration: none;
       color: inherit;
       transition: opacity 0.15s;
@@ -466,7 +476,7 @@
 
     .about-body p {
       font-size: 1rem;
-      color: var(--text);
+      color: var(--text-primary);
       line-height: 1.75;
     }
 
@@ -482,8 +492,8 @@
     }
 
     .skill-item {
-      background: var(--bg-alt);
-      border: 1px solid var(--border);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
       border-radius: 6px;
       padding: 14px 16px;
     }
@@ -500,12 +510,12 @@
 
     .skill-item .skill-tools {
       font-size: 0.875rem;
-      color: var(--text);
+      color: var(--text-primary);
     }
 
     /* ── Footer ────────────────────────────────────────────── */
     footer {
-      border-top: 1px solid var(--border);
+      border-top: 1px solid var(--border-color);
       padding: 40px 0;
     }
 
@@ -537,7 +547,7 @@
       transition: color 0.15s;
     }
 
-    .footer-links a:hover { color: var(--text); }
+    .footer-links a:hover { color: var(--text-primary); }
 
     /* ── Scroll animations ─────────────────────────────────── */
     .fade-in {
@@ -903,7 +913,7 @@
         if (entry.isIntersecting) {
           navLinks.forEach(a => {
             a.style.color = a.getAttribute('href') === '#' + entry.target.id
-              ? 'var(--text)'
+              ? 'var(--text-primary)'
               : '';
           });
         }

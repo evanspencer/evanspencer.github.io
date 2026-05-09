@@ -11,94 +11,109 @@
     /* ── Reset ─────────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* ── Light mode — warm cream, orange-primary, blue-secondary ── */
+    /* ── Kanagawa Lotus — light mode ──────────────────────────── */
     :root {
-      --bg:                      #faf8f5;
-      --bg-alt:                  #f0ede8;
-      --border:                  #d5ccbf;
-      --text:                    #2a2735;
-      --text-muted:              #7a708a;
-      --accent-primary:          #E8956D;
-      --accent-primary-hover:    #D4774E;
-      --accent-primary-subtle:   #F5DDD3;
-      --accent-secondary:        #7AA2D4;
-      --accent-secondary-subtle: #D6E4F5;
-      --card-bg:                 #ffffff;
-      --tag-bg:                  #D6E4F5;
-      --tag-text:                #4a70a0;
-      --nav-bg:                  rgba(250,248,245,0.88);
-      --code-bg:                 #1a1b2e;
-      --code-fg:                 #c0caf5;
-      --shadow:                  0 1px 3px rgba(42,39,53,0.08), 0 4px 16px rgba(42,39,53,0.05);
+      --bg-primary:              #F8F7F4;
+      --bg-secondary:            #EFEDE8;
+      --bg-surface:              #FFFFFF;
+      --border-color:            #D8D5CE;
+      --text-primary:            #2D2D3D;
+      --text-muted:              #8A8980;
+      --accent-primary:          #C98A2E;
+      --accent-primary-hover:    #B8751A;
+      --accent-primary-subtle:   #F5E8C8;
+      --accent-primary-text:     #7A5A10;
+      --accent-secondary:        #4E8B7A;
+      --accent-secondary-subtle: #D4EDE8;
+      --accent-secondary-text:   #2D6B5C;
+      --nav-bg:                  rgba(248,247,244,0.88);
+      --code-bg:                 #1F1F28;
+      --code-fg:                 #DCD7BA;
+      --syntax-blue:             #4A6FA5;
+      --shadow:                  0 1px 3px rgba(45,45,61,0.08), 0 4px 16px rgba(45,45,61,0.05);
       --radius:                  10px;
       --font: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
       --font-mono: "SF Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace;
     }
 
-    /* ── Dark mode: system preference ─────────────────────── */
+    /* ── Kanagawa Ink — dark mode: system preference ───────────── */
     @media (prefers-color-scheme: dark) {
       :root:not([data-theme="light"]) {
-        --bg:                      #1a1b2e;
-        --bg-alt:                  #16213e;
-        --border:                  #2f3549;
-        --text:                    #c0caf5;
-        --text-muted:              #565f89;
-        --accent-primary:          #D4845A;
-        --accent-primary-hover:    #E89A72;
-        --accent-primary-subtle:   #3D2318;
-        --accent-secondary:        #6A9DC8;
-        --accent-secondary-subtle: #1A2A3D;
-        --card-bg:                 #0f3460;
-        --tag-bg:                  #1A2A3D;
-        --tag-text:                #7AA2D4;
-        --nav-bg:                  rgba(26,27,46,0.92);
+        --bg-primary:              #1F1F28;
+        --bg-secondary:            #2A2A37;
+        --bg-surface:              #2A2A37;
+        --border-color:            #363646;
+        --text-primary:            #DCD7BA;
+        --text-muted:              #727169;
+        --accent-primary:          #DCA561;
+        --accent-primary-hover:    #E8B878;
+        --accent-primary-subtle:   #3D2B0A;
+        --accent-primary-text:     #DCA561;
+        --accent-secondary:        #6A9589;
+        --accent-secondary-subtle: #0D2D27;
+        --accent-secondary-text:   #6A9589;
+        --nav-bg:                  rgba(31,31,40,0.92);
         --code-bg:                 #16161e;
         --shadow:                  0 1px 3px rgba(0,0,0,0.5), 0 4px 16px rgba(0,0,0,0.35);
+        --syntax-blue:   #7E9CD8;
+        --syntax-purple: #957FB8;
+        --syntax-green:  #98BB6C;
+        --syntax-red:    #E46876;
+        --syntax-orange: #FFA066;
       }
     }
+
+    /* ── Dark mode: manual override ───────────────────────────── */
     html[data-theme="dark"] {
-      --bg:                      #1a1b2e;
-      --bg-alt:                  #16213e;
-      --border:                  #2f3549;
-      --text:                    #c0caf5;
-      --text-muted:              #565f89;
-      --accent-primary:          #D4845A;
-      --accent-primary-hover:    #E89A72;
-      --accent-primary-subtle:   #3D2318;
-      --accent-secondary:        #6A9DC8;
-      --accent-secondary-subtle: #1A2A3D;
-      --card-bg:                 #0f3460;
-      --tag-bg:                  #1A2A3D;
-      --tag-text:                #7AA2D4;
-      --nav-bg:                  rgba(26,27,46,0.92);
+      --bg-primary:              #1F1F28;
+      --bg-secondary:            #2A2A37;
+      --bg-surface:              #2A2A37;
+      --border-color:            #363646;
+      --text-primary:            #DCD7BA;
+      --text-muted:              #727169;
+      --accent-primary:          #DCA561;
+      --accent-primary-hover:    #E8B878;
+      --accent-primary-subtle:   #3D2B0A;
+      --accent-primary-text:     #DCA561;
+      --accent-secondary:        #6A9589;
+      --accent-secondary-subtle: #0D2D27;
+      --accent-secondary-text:   #6A9589;
+      --nav-bg:                  rgba(31,31,40,0.92);
       --code-bg:                 #16161e;
       --shadow:                  0 1px 3px rgba(0,0,0,0.5), 0 4px 16px rgba(0,0,0,0.35);
+      --syntax-blue:   #7E9CD8;
+      --syntax-purple: #957FB8;
+      --syntax-green:  #98BB6C;
+      --syntax-red:    #E46876;
+      --syntax-orange: #FFA066;
     }
+
+    /* ── Light mode: manual override (beats system dark) ──────── */
     html[data-theme="light"] {
-      --bg:                      #faf8f5;
-      --bg-alt:                  #f0ede8;
-      --border:                  #d5ccbf;
-      --text:                    #2a2735;
-      --text-muted:              #7a708a;
-      --accent-primary:          #E8956D;
-      --accent-primary-hover:    #D4774E;
-      --accent-primary-subtle:   #F5DDD3;
-      --accent-secondary:        #7AA2D4;
-      --accent-secondary-subtle: #D6E4F5;
-      --card-bg:                 #ffffff;
-      --tag-bg:                  #D6E4F5;
-      --tag-text:                #4a70a0;
-      --nav-bg:                  rgba(250,248,245,0.88);
-      --code-bg:                 #1a1b2e;
-      --shadow:                  0 1px 3px rgba(42,39,53,0.08), 0 4px 16px rgba(42,39,53,0.05);
+      --bg-primary:              #F8F7F4;
+      --bg-secondary:            #EFEDE8;
+      --bg-surface:              #FFFFFF;
+      --border-color:            #D8D5CE;
+      --text-primary:            #2D2D3D;
+      --text-muted:              #8A8980;
+      --accent-primary:          #C98A2E;
+      --accent-primary-hover:    #B8751A;
+      --accent-primary-subtle:   #F5E8C8;
+      --accent-primary-text:     #7A5A10;
+      --accent-secondary:        #4E8B7A;
+      --accent-secondary-subtle: #D4EDE8;
+      --accent-secondary-text:   #2D6B5C;
+      --nav-bg:                  rgba(248,247,244,0.88);
+      --code-bg:                 #1F1F28;
+      --shadow:                  0 1px 3px rgba(45,45,61,0.08), 0 4px 16px rgba(45,45,61,0.05);
     }
 
     html { scroll-behavior: smooth; font-size: 16px; }
 
     body {
       font-family: var(--font);
-      background: var(--bg);
-      color: var(--text);
+      background: var(--bg-primary);
+      color: var(--text-primary);
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
     }
@@ -111,7 +126,7 @@
       background: var(--nav-bg);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--border-color);
     }
     .nav-inner {
       max-width: 780px;
@@ -125,7 +140,7 @@
     .nav-logo {
       font-size: 0.9rem;
       font-weight: 600;
-      color: var(--text);
+      color: var(--text-primary);
       text-decoration: none;
       letter-spacing: -0.01em;
     }
@@ -140,10 +155,10 @@
       text-decoration: none;
       transition: color 0.15s;
     }
-    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover { color: var(--text-primary); }
     .theme-toggle {
       background: none;
-      border: 1px solid var(--border);
+      border: 1px solid var(--border-color);
       color: var(--text-muted);
       border-radius: 6px;
       width: 34px;
@@ -169,7 +184,7 @@
     .post-header {
       padding-top: 108px;
       padding-bottom: 48px;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--border-color);
     }
     .breadcrumb {
       font-size: 0.8rem;
@@ -195,15 +210,15 @@
       font-family: var(--font-mono);
       padding: 3px 9px;
       border-radius: 4px;
-      background: var(--tag-bg);
-      color: var(--tag-text);
+      background: var(--accent-secondary-subtle);
+      color: var(--accent-secondary-text);
     }
     .post-header h1 {
       font-size: clamp(1.7rem, 4vw, 2.4rem);
       font-weight: 700;
       letter-spacing: -0.025em;
       line-height: 1.2;
-      color: var(--text);
+      color: var(--text-primary);
       margin-bottom: 20px;
     }
     .post-meta {
@@ -229,14 +244,14 @@
     .post-body p {
       font-size: 1.05rem;
       line-height: 1.8;
-      color: var(--text);
+      color: var(--text-primary);
       margin-bottom: 24px;
     }
     .post-body h2 {
       font-size: 1.3rem;
       font-weight: 700;
       letter-spacing: -0.02em;
-      color: var(--text);
+      color: var(--text-primary);
       margin: 48px 0 16px;
       padding-top: 4px;
     }
@@ -251,10 +266,10 @@
       font-size: 1.05rem;
       font-weight: 600;
       letter-spacing: -0.01em;
-      color: var(--text);
+      color: var(--text-primary);
       margin: 32px 0 12px;
     }
-    .post-body strong { color: var(--text); font-weight: 600; }
+    .post-body strong { color: var(--text-primary); font-weight: 600; }
     .post-body em { color: var(--text-muted); font-style: italic; }
 
     /* links in body */
@@ -296,7 +311,7 @@
     }
     /* Tokyo Night token colors — applied manually via spans */
     .tok-kw   { color: #bb9af7; }  /* keyword — purple */
-    .tok-fn   { color: #7aa2f7; }  /* function — blue */
+    .tok-fn   { color: var(--syntax-blue); }  /* function — blue */
     .tok-str  { color: #9ece6a; }  /* string — green */
     .tok-num  { color: #ff9e64; }  /* number — orange */
     .tok-cm   { color: #565f89; }  /* comment — muted */
@@ -313,19 +328,19 @@
       margin: 28px 0;
       font-size: 0.95rem;
       line-height: 1.7;
-      color: var(--text);
+      color: var(--text-primary);
     }
 
     /* horizontal rule */
     .post-body hr {
       border: none;
-      border-top: 1px solid var(--border);
+      border-top: 1px solid var(--border-color);
       margin: 48px 0;
     }
 
     /* ── Post footer / prev-next ─────────────────────────── */
     .post-nav {
-      border-top: 1px solid var(--border);
+      border-top: 1px solid var(--border-color);
       padding: 40px 0;
       display: flex;
       justify-content: space-between;
@@ -354,7 +369,7 @@
 
     /* ── Site footer ─────────────────────────────────────── */
     .site-footer {
-      border-top: 1px solid var(--border);
+      border-top: 1px solid var(--border-color);
       padding: 36px 0;
     }
     .site-footer .footer-inner {
@@ -375,7 +390,7 @@
       text-decoration: none;
       transition: color 0.15s;
     }
-    .site-footer .footer-links a:hover { color: var(--text); }
+    .site-footer .footer-links a:hover { color: var(--text-primary); }
 
     /* ── Responsive ──────────────────────────────────────── */
     @media (max-width: 600px) {
