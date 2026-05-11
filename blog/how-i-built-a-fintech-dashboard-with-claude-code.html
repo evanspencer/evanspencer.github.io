@@ -30,6 +30,9 @@
       --code-bg:                 #1F1F28;
       --code-fg:                 #DCD7BA;
       --syntax-blue:             #4A6FA5;
+      --syntax-purple:           #7A5BA8;
+      --syntax-green:            #3A7A44;
+      --syntax-orange:           #B05000;
       --shadow:                  0 1px 3px rgba(45,45,61,0.08), 0 4px 16px rgba(45,45,61,0.05);
       --radius:                  10px;
       --font: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
@@ -105,6 +108,10 @@
       --accent-secondary-text:   #2D6B5C;
       --nav-bg:                  rgba(248,247,244,0.88);
       --code-bg:                 #1F1F28;
+      --syntax-blue:             #4A6FA5;
+      --syntax-purple:           #7A5BA8;
+      --syntax-green:            #3A7A44;
+      --syntax-orange:           #B05000;
       --shadow:                  0 1px 3px rgba(45,45,61,0.08), 0 4px 16px rgba(45,45,61,0.05);
     }
 
@@ -294,9 +301,8 @@
 
     /* code blocks */
     .post-body pre {
-      background: var(--code-bg);
-      border: 1px solid var(--accent-secondary-subtle);
-      border-left: 3px solid var(--accent-secondary);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
       border-radius: var(--radius);
       padding: 22px 24px;
       overflow-x: auto;
@@ -304,20 +310,20 @@
     }
     .post-body pre code {
       background: none;
-      color: var(--code-fg);
+      color: var(--text-primary);
       padding: 0;
       font-size: 0.875rem;
       line-height: 1.65;
     }
-    /* Tokyo Night token colors — applied manually via spans */
-    .tok-kw   { color: #bb9af7; }  /* keyword — purple */
-    .tok-fn   { color: var(--syntax-blue); }  /* function — blue */
-    .tok-str  { color: #9ece6a; }  /* string — green */
-    .tok-num  { color: #ff9e64; }  /* number — orange */
-    .tok-cm   { color: #565f89; }  /* comment — muted */
-    .tok-cls  { color: #e0af68; }  /* class — yellow */
-    .tok-var  { color: #c0caf5; }  /* variable — foreground */
-    .tok-key  { color: #7dcfff; }  /* dict key — cyan */
+    /* Kanagawa token colors — applied manually via spans */
+    .tok-kw   { color: var(--syntax-purple); }           /* keyword */
+    .tok-fn   { color: var(--syntax-blue); }             /* function */
+    .tok-str  { color: var(--syntax-green); }            /* string */
+    .tok-num  { color: var(--syntax-blue); }             /* number */
+    .tok-cm   { color: var(--text-muted); opacity: 0.7; } /* comment */
+    .tok-cls  { color: var(--syntax-orange); }           /* class name */
+    .tok-var  { color: var(--text-primary); }            /* variable — foreground */
+    .tok-key  { color: var(--accent-secondary); }        /* dict key */
 
     /* callout box */
     .callout {
